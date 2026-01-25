@@ -16,11 +16,13 @@ make up
 
 Una vez ejecutado `make up`, estos son los puntos de acceso locales:
 
-| Servicio          | URL / Host                                     | Puerto | Descripción                                      |
-| :---------------- | :--------------------------------------------- | :----- | :----------------------------------------------- |
-| **Frontend**      | [http://localhost:8080](http://localhost:8080) | `8080` | Aplicación Vue 3 / Symfony API                   |
-| **Mailpit**       | [http://localhost:8025](http://localhost:8025) | `8025` | Panel de control de correos (Entorno de pruebas) |
-| **Base de Datos** | `localhost`                                    | `5432` | PostgreSQL (DBeaver)                             |
+| Servicio                | URL / Host                                                       | Puerto | Descripción                                      |
+| :---------------------- | :--------------------------------------------------------------- | :----- | :----------------------------------------------- |
+| **Frontend**            | [http://localhost:5173](http://localhost:5173)                   | `5173` | Vue 3                                            |
+| **Frontend -> Backend** | [http://localhost:5173/api/test](http://localhost:5173/api/test) | `5173` | Symfony API                                      |
+| **Backend**             | [http://localhost:8080](http://localhost:8080)                   | `8080` | Symfony API                                      |
+| **Mailpit**             | [http://localhost:8025](http://localhost:8025)                   | `8025` | Panel de control de correos (Entorno de pruebas) |
+| **Base de Datos**       | `localhost`                                                      | `5432` | PostgreSQL (DBeaver)                             |
 
 ## 🤖 Configuración de IA
 
