@@ -8,7 +8,7 @@
 ## Perfil del Proyecto
 - **SaaS:** Gestión de inventario universal (Multisector: Retail, Hostelería, Almacenes).
 - **Backend:** Symfony 8 (PHP 8.5), PostgreSQL, Docker.
-- **Frontend:** Vue 3 (Vite + TypeScript), PWA.
+- **Frontend:** Angular v21, PWA.
 - **Enfoque de Diseño:** Mobile-first (Optimizado para operarios en movimiento y uso con una mano).
 
 ## Reglas de Estilo CSS (CRÍTICO)

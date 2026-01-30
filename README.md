@@ -4,7 +4,7 @@ Sistema de **gestión de inventario** universal (multisector: retail, hostelerí
 
 ## 🚀 Inicio Rápido
 
-1. **Levantar el entorno:**
+1. **Inicializar el back**
 
 ```bash
 cp .env.example .env
@@ -12,17 +12,28 @@ make build
 make up
 ```
 
+2. **Inicializar el frontal**
+
+```bash
+cd frontend/
+npm i
+ng server
+```
+
 ## 🌐 Accesos a los Servicios
 
-Una vez ejecutado `make up`, estos son los puntos de acceso locales:
+Una vez levantados los entornos, estos son los puntos de acceso locales:
 
-| Servicio                | URL / Host                                                       | Puerto | Descripción                                      |
-| :---------------------- | :--------------------------------------------------------------- | :----- | :----------------------------------------------- |
-| **Frontend**            | [http://localhost:5173](http://localhost:5173)                   | `5173` | Vue 3                                            |
-| **Frontend -> Backend** | [http://localhost:5173/api/test](http://localhost:5173/api/test) | `5173` | Symfony API                                      |
-| **Backend**             | [http://localhost:8080](http://localhost:8080)                   | `8080` | Symfony API                                      |
-| **Mailpit**             | [http://localhost:8025](http://localhost:8025)                   | `8025` | Panel de control de correos (Entorno de pruebas) |
-| **Base de Datos**       | `localhost`                                                      | `5432` | PostgreSQL (DBeaver)                             |
+| Servicio            | URL / Host                                                       | Puerto | Descripción                                      |
+| :------------------ | :--------------------------------------------------------------- | :----- | :----------------------------------------------- |
+| **Frontend**        | [http://localhost:4200](http://localhost:4200)                   | `4200` | Angular                                          |
+| **Front > Backend** | [http://localhost:4200/api/test](http://localhost:4200/api/test) | `4200` | Symfony API                                      |
+| **Backend**         | [http://localhost:8080](http://localhost:8080)                   | `8080` | Symfony API                                      |
+| **Mailpit**         | [http://localhost:8025](http://localhost:8025)                   | `8025` | Panel de control de correos (Entorno de pruebas) |
+| **Base de Datos**   | `localhost`                                                      | `5432` | PostgreSQL (DBeaver)                             |
+
+>El proxy `proxy.conf.json` solo funciona en desarrollo con el servidor de Angular. En producción, será el propio servidor web quien haga de pasarela enviando las peticiones del frontend al backend.
+
 
 ## 🤖 Configuración de IA
 

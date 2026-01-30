@@ -24,9 +24,6 @@ top:
 ps:
 	@$(COMPOSE) ps -a
 
-front:
-	cd frontend && pnpm dev
-
 # Ver logs de un servicio específico
 logs:
 	@read -p "Service name (php, nginx, database): " SERVICE; \
