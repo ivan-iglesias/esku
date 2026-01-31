@@ -13,7 +13,11 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "preserve",
+    "paths": {
+      "@angular/forms": ["./node_modules/@angular/forms"],
+      "@angular/forms/experimental": ["./node_modules/@angular/forms/fesm2022/experimental.mjs"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
