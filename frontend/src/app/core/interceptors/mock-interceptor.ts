@@ -13,16 +13,16 @@ export const mockInterceptor: HttpInterceptorFn = (req, next) => {
     })).pipe(delay(2000));
   }
 
-  // if (url.endsWith('/api/login-check') && method === 'POST') {
-  //   const errorResponse = new HttpErrorResponse({
-  //     error: { message: 'Credenciales inválidas' },
-  //     status: 500,
-  //     statusText: 'Unauthorized',
-  //     url: url
-  //   });
+  if (url.endsWith('/api/login-check') && method === 'POST') {
+    const errorResponse = new HttpErrorResponse({
+      error: { message: 'Credenciales inválidas' },
+      status: 500,
+      statusText: 'Unauthorized',
+      url: url
+    });
 
-  //   return throwError(() => errorResponse);
-  // }
+    return throwError(() => errorResponse);
+  }
 
   // Mock para Listado de usuarios
   if (url.endsWith('/api/users') && method === 'GET') {

@@ -8,6 +8,7 @@ import { mockInterceptor } from './core/interceptors/mock-interceptor';
 import { environment } from '../environments/environment';
 import { authInterceptor } from './core/interceptors/auth-interceptor';
 import { resilienceInterceptor } from './core/interceptors/resilience-interceptor';
+import { cacheInterceptor } from './core/interceptors/cache-interceptor-interceptor';
 
 const isDev = !environment.production;
 
@@ -17,6 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(
       withInterceptors([
+        cacheInterceptor,
         resilienceInterceptor,
         authInterceptor,
         errorInterceptor,
