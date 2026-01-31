@@ -1,11 +1,10 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
-
-// Si tenemos un servicio para mostrar notificaciones (Toasts)
-// import { NotificationService } from '@core/services/notification.service';
+import { LoggerService } from '../services/logger-service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
-  // const notify = inject(NotificationService);
+  const logger = inject(LoggerService);
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
@@ -13,15 +12,13 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
       if (error.status === 0) {
         errorMessage = 'Sin conexión. Esku funcionará en modo offline.';
-        // Aquí podrías disparar un evento global de "Modo Offline"
       } else if (error.status >= 400 && error.status < 500) {
         errorMessage = error.error?.message || 'Datos incorrectos';
       } else if (error.status >= 500) {
         errorMessage = 'Error en el servidor. Contacte con soporte.';
       }
 
-      console.error(`[ERROR ${error.status}]: ${errorMessage}`);
-      // notify.show(errorMessage, 'error');
+      logger.error(`${error.status}: ${errorMessage}`);
 
       return throwError(() => error);
     })

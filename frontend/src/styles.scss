@@ -1,1 +1,53 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@ngxpert/hot-toast/styles';
+
+:root {
+  --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-size-base: 16px;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+* {
+  box-sizing: border-box; /* Recomendable para que paddings no rompan anchos */
+  -webkit-tap-highlight-color: transparent; /* Toques reactivos: Asegúrate de que los botones y Toasts no tengan el "flash" azul al tocarlos. */
+}
+
+// Evitar el scroll horizontal
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  font-size: var(--font-size-base);
+
+  /* Mejora el renderizado en pantallas de alta densidad */
+  letter-spacing: -0.011em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; /* Soporte para Firefox en Mac */
+}
+
+// Contraste de los inputs: Ya que usamos is-invalid con borde rojo, asegúrate de que el texto sea siempre legible.
+input::placeholder {
+  color: #9ca3af; /* Gris claro estándar para que no se confunda con texto real */
+}
+
+.hot-toast-bar-base {
+  font-family: var(--font-main) !important;
+  font-size: 14px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  padding: 16px 20px !important;
+}
+
+.hot-toast-icon {
+  width: 24px !important;
+  height: 24px !important;
+}
+
