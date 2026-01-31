@@ -20,10 +20,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         errorMessage = 'Error en el servidor. Contacte con soporte.';
       }
 
-      console.error(`[ESKU ERROR ${error.status}]: ${errorMessage}`);
+      console.error(`[ERROR ${error.status}]: ${errorMessage}`);
       // notify.show(errorMessage, 'error');
 
-      return throwError(() => new Error(errorMessage));
+      return throwError(() => error);
     })
   );
 };

@@ -7,6 +7,7 @@ import { errorInterceptor } from './core/interceptors/error-interceptor';
 import { mockInterceptor } from './core/interceptors/mock-interceptor';
 import { environment } from '../environments/environment';
 import { authInterceptor } from './core/interceptors/auth-interceptor';
+import { resilienceInterceptor } from './core/interceptors/resilience-interceptor';
 
 const isDev = !environment.production;
 
@@ -16,6 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(
       withInterceptors([
+        resilienceInterceptor,
         authInterceptor,
         errorInterceptor,
         ...(isDev ? [mockInterceptor] : []),

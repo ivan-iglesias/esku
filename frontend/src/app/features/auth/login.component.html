@@ -1,53 +1,57 @@
 <form (submit)="onSubmit($event)" class="login-form">
   <h1 class="login-form__title">Esku Logistics</h1>
 
-  <div class="login-form__field">
-    <label for="email">Email</label>
-    <input
-      id="email"
-      type="email"
-      [formField]="loginForm.email"
-      class="login-form__input"
-      [class.login-form__input--error]="
-        loginForm.email().touched() && loginForm.email().invalid()
-      "
-    />
+  <fieldset [disabled]="authService.state().loading" class="login-form__group">
+    <div class="login-form__field">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        [formField]="loginForm.email"
+        class="login-form__input"
+        [class.is-invalid]="loginForm.email().touched() && loginForm.email().invalid()"
+      />
 
-    @if (loginForm.email().touched() && loginForm.email().invalid()) {
-    <ul class="error-list">
-      @for (error of loginForm.email().errors(); track $index) {
-      <li>{{ error.message }}</li>
-      }
-    </ul>
-    }
-  </div>
-
-  <div class="login-form__field">
-    <label for="password">Password</label>
-    <input
-      id="password"
-      type="password"
-      [formField]="loginForm.password"
-      class="login-form__input"
-      [class.login-form__input--error]="
-        loginForm.password().touched() && loginForm.password().invalid()
-      "
-    />
-
-    @if (loginForm.password().touched() && loginForm.password().invalid()) {
-    <div class="error-list">
-      @for (error of loginForm.password().errors(); track $index) {
-      <p>{{ error.message }}</p>
+      @if (loginForm.email().touched() && loginForm.email().invalid()) {
+      <ul class="error-list">
+        @for (error of loginForm.email().errors(); track $index) {
+        <li>{{ error.message }}</li>
+        }
+      </ul>
       }
     </div>
-    }
-  </div>
+
+    <div class="login-form__field">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        [formField]="loginForm.password"
+        class="login-form__input"
+        [class.login-form__input--error]="
+          loginForm.password().touched() && loginForm.password().invalid()
+        "
+      />
+
+      @if (loginForm.password().touched() && loginForm.password().invalid()) {
+      <div class="error-list">
+        @for (error of loginForm.password().errors(); track $index) {
+        <p>{{ error.message }}</p>
+        }
+      </div>
+      }
+    </div>
+  </fieldset>
 
   <button
     type="submit"
     class="login-form__button"
     [disabled]="loginForm().invalid() || authService.state().loading"
   >
-    {{ authService.state().loading ? 'Entrando...' : 'Log In' }}
+    @if (authService.state().loading) {
+    <span class="spinner"></span>
+    } @else {
+    <span class="button-text">Log In</span>
+    }
   </button>
 </form>

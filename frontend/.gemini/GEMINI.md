@@ -69,11 +69,19 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Data Access: Use the inject(HttpClient) pattern inside Services. Services must return typed Observables using Interfaces defined in core/models.
 - Interceptors: All API calls must pass through authInterceptor (for credentials) and errorInterceptor (for global error handling).
 
-# API & Offline-First
+# API & Resilience Strategy
 
-- Mocking: Use a MockInterceptor during development to simulate API responses before Symfony endpoints are ready.
-- Offline Storage: Use Dexie.js for local persistence. Services should implement a "Stale-While-Revalidate" pattern when necessary.
-- Error Handling: Use a global LoggerService that can be disabled in production.
+- **Mocking**: Use a `MockInterceptor` for local development. It must support failure simulation (401, 500) and latency injection to test timeouts.
+- **Resilience Layer**:
+    - **Global Interceptor**: All requests must pass through a `resilienceInterceptor`.
+    - **Retry Policy**: Implement exponential backoff for transient errors (Timeouts, 5xx). Avoid retrying 4xx errors.
+    - **Timeout**: Strict 8-second limit for standard requests; use `HttpContext` for long-running operations.
+    - **Circuit Breaker**: Implement a stateful circuit breaker to prevent cascading failures and provide immediate feedback when the API is down.
+- **Offline & Persistence**:
+    - **Storage**: Encapsulate `localStorage` in a `StorageService` with AES encryption for sensitive data (JWT).
+    - **Offline Storage**: Use Dexie.js for heavy local persistence (Inventory/Picking queues).
+    - **Pattern**: Implement "Stale-While-Revalidate" for critical master data (Warehouse locations, Item types).
+- **Error Handling**: Centralized `ErrorInterceptor` for UI notifications. Use a `LoggerService` with level-based filtering (Debug/Info/Error).
 
 # Security
 

@@ -59,3 +59,58 @@ button:active {
 .error-list p {
   margin: 0;
 }
+
+.login-form__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // 1. Define una altura fija para que no dependa del contenido
+  height: 48px;
+  padding: 0 20px;
+
+  // 2. Evita que el botón cambie de ancho si el texto es corto
+  min-width: 120px;
+
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.spinner {
+  // 3. El spinner debe ser un poco más pequeño que la fuente
+  width: 1.2rem;
+  height: 1.2rem;
+
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+
+  // Aseguramos que no añada margen extra
+  display: block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+    input.is-invalid {      border: 2px solid red;      background-color: white;    }
+
+
+    .login-form__group {
+  // Elimina el borde y el padding por defecto del navegador
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0; // Evita que el fieldset se desborde en flexbox
+  display: contents; // Hace que el fieldset "desaparezca" visualmente pero mantenga su lógica
+
+  // Opcional: Si 'display: contents' da problemas con algún layout de grid/flex antiguo
+  // usa esta alternativa:
+  // display: block;
+  // width: 100%;
+}

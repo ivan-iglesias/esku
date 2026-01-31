@@ -18,8 +18,8 @@ export class LoginComponent {
   private router = inject(Router);
 
   loginModel = signal<LoginData>({
-    email: '',
-    password: '',
+    email: 'de@de.com',
+    password: 'de',
   });
 
   loginForm = form(this.loginModel, (schemaPath) => {
@@ -40,7 +40,7 @@ export class LoginComponent {
 
     this.authService.login(credentials).subscribe({
       next: () => this.router.navigate(['/inventory']),
-      error: () => {}
+      error: () => {},
     });
   }
 }
