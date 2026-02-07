@@ -10,13 +10,13 @@ export const mockInterceptor: HttpInterceptorFn = (req, next) => {
     return of(new HttpResponse({
       status: 200,
       body: { user: { id: 1, username: 'operario_bilbao', roles: ['ROLE_USER'] } }
-    })).pipe(delay(2000));
+    })).pipe(delay(1200));
   }
 
   if (url.endsWith('/api/login-check') && method === 'POST') {
     const errorResponse = new HttpErrorResponse({
-      error: { message: 'Credenciales inválidas' },
-      status: 500,
+      error: { message: 'Credenciales inválidas', code: 'INVALID_CREDENTIALS' },
+      status: 400,
       statusText: 'Unauthorized',
       url: url
     });

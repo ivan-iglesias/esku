@@ -83,7 +83,6 @@ You are an expert in TypeScript, Angular, and scalable web application developme
     - **Pattern**: Implement "Stale-While-Revalidate" for critical master data (Warehouse locations, Item types).
 - **Error Handling & Logging**:
     - **Centralized Logger**: All errors must pass through `LoggerService`.
-    - **UI Notifications**: The `LoggerService` is responsible for triggering `HotToast` notifications for `info`, `success`, and `error` levels.
     - **Production**: Console logs (except errors) must be disabled in production, but Toasts remain active for user feedback.
 
 # Security

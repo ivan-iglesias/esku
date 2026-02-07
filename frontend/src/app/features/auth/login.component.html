@@ -54,4 +54,10 @@
     <span class="button-text">Log In</span>
     }
   </button>
+
+  @if (authService.state().error) {
+    <p class="error-list">
+      {{ authService.state().error }}
+    </p>
+  }
 </form>

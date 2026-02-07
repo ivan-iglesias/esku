@@ -9,7 +9,6 @@ import { environment } from '../environments/environment';
 import { authInterceptor } from './core/interceptors/auth-interceptor';
 import { resilienceInterceptor } from './core/interceptors/resilience-interceptor';
 import { cacheInterceptor } from './core/interceptors/cache-interceptor-interceptor';
-import { provideHotToastConfig } from '@ngxpert/hot-toast';
 
 const isDev = !environment.production;
 
@@ -20,17 +19,11 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([
         cacheInterceptor,
-        resilienceInterceptor,
         authInterceptor,
         errorInterceptor,
+        resilienceInterceptor,
         ...(isDev ? [mockInterceptor] : []),
       ]),
     ),
-    provideHotToastConfig({
-      position: 'top-right',
-      stacking: 'vertical',
-      autoClose: true,
-      dismissible: true,
-    }),
   ],
 };

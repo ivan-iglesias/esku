@@ -8,19 +8,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      let errorMessage = 'Ha ocurrido un error inesperado';
+      // Trazabilidad técnica, mensajes para usuario en el ErrorHandlerService
+      const errorMessage = error?.error?.message || error.message;
 
-      if (error.status === 0) {
-        errorMessage = 'Sin conexión. Esku funcionará en modo offline.';
-      } else if (error.status >= 400 && error.status < 500) {
-        errorMessage = error.error?.message || 'Datos incorrectos';
-      } else if (error.status >= 500) {
-        errorMessage = 'Error en el servidor. Contacte con soporte.';
-      }
-
-      logger.error(`${error.status}: ${errorMessage}`);
+      logger.error(`${error.status}: "${req.url}" | ${errorMessage}`);
 
       return throwError(() => error);
-    })
+    }),
   );
 };
