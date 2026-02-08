@@ -1,23 +1,14 @@
-:root {
-  --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-size-base: 16px;
-}
-
-* {
-  -webkit-tap-highlight-color: transparent;
-}
-
 * {
   box-sizing: border-box; /* Recomendable para que paddings no rompan anchos */
   -webkit-tap-highlight-color: transparent; /* Toques reactivos: Asegúrate de que los botones y Toasts no tengan el "flash" azul al tocarlos. */
 }
 
-// Evitar el scroll horizontal
 html, body {
   overflow-x: hidden;
-  width: 100%;
-  height: 100%;
   margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
 }
 
 body {

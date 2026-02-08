@@ -1,0 +1,19 @@
+// Fuentes y Tamaños
+$font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+$font-size-base: 16px;
+
+// Bordes
+$border-radius: 12px;
+
+// Breakpoints
+$bp-mobile: 640px;
+$bp-tablet: 1024px;
+$bp-desktop: 1280px;
+
+// Variables CSS (Para PrimeNG y uso dinámico en runtime)
+:root {
+  --font-main: #{$font-main};
+  --font-size-base: #{$font-size-base};
+  --border-radius: #{$border-radius};
+  --p-border-radius-md: #{$border-radius};
+}

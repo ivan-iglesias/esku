@@ -1,63 +1,72 @@
-<form (submit)="onSubmit($event)" class="login-form">
-  <h1 class="login-form__title">Esku Logistics</h1>
+<div class="login-container">
+  <form (submit)="onSubmit($event)" class="login-form">
+    <h1 class="login-form__title">Esku Logistics</h1>
 
-  <fieldset [disabled]="authService.state().loading" class="login-form__group">
-    <div class="login-form__field">
-      <label for="email">Email</label>
-      <input
-        id="email"
-        type="email"
-        [formField]="loginForm.email"
-        class="login-form__input"
-        [class.is-invalid]="loginForm.email().touched() && loginForm.email().invalid()"
-      />
+    <fieldset [disabled]="authService.state().loading" class="login-form__group">
+      <div class="login-form__field">
+        <label for="email">Email</label>
 
-      @if (loginForm.email().touched() && loginForm.email().invalid()) {
-      <ul class="error-list">
-        @for (error of loginForm.email().errors(); track $index) {
-        <li>{{ error.message }}</li>
-        }
-      </ul>
-      }
-    </div>
+        <input
+          pInputText
+          id="email"
+          type="email"
+          [formField]="loginForm.email"
+          class="login-form__input"
+          [class.p-invalid]="loginForm.email().touched() && loginForm.email().invalid()"
+        />
 
-    <div class="login-form__field">
-      <label for="password">Password</label>
-      <input
-        id="password"
-        type="password"
-        [formField]="loginForm.password"
-        class="login-form__input"
-        [class.login-form__input--error]="
-          loginForm.password().touched() && loginForm.password().invalid()
-        "
-      />
-
-      @if (loginForm.password().touched() && loginForm.password().invalid()) {
-      <div class="error-list">
-        @for (error of loginForm.password().errors(); track $index) {
-        <p>{{ error.message }}</p>
-        }
+        <div class="login-form__error-container">
+          @if (loginForm.email().touched() && loginForm.email().invalid()) {
+            <small class="error-text">
+              @for (error of loginForm.email().errors(); track $index) {
+                {{ error.message }}
+              }
+            </small>
+          }
+        </div>
       </div>
-      }
+
+      <div class="login-form__field">
+        <label for="password">Password</label>
+
+        <p-password
+          id="password"
+          [formField]="$any(loginForm.password)"
+          [toggleMask]="true"
+          [feedback]="false"
+          placeholder="••••••••"
+          [class.p-invalid]="loginForm.password().touched() && loginForm.password().invalid()"
+          class="login-form__password-field"
+          inputStyleClass="login-form__input"
+        />
+
+        <div class="login-form__error-container"></div>
+      </div>
+    </fieldset>
+
+    <div class="login-form__options">
+      <div class="flex-row">
+        <p-checkbox [formField]="loginForm.rememberMe" binary="true" inputId="rememberMe" />
+        <label for="rememberMe" class="login-form__checkbox-label"> Recordar sesión </label>
+      </div>
+
+      <a [routerLink]="['/forgot-password']" class="login-form__forgot-link">
+        ¿Olvidaste tu contraseña?
+      </a>
+
+      <!-- <a routerLink="/forgot-password" class="login-form__forgot-link">¿Olvidaste tu contraseña?</a> -->
     </div>
-  </fieldset>
 
-  <button
-    type="submit"
-    class="login-form__button"
-    [disabled]="loginForm().invalid() || authService.state().loading"
-  >
-    @if (authService.state().loading) {
-    <span class="spinner"></span>
-    } @else {
-    <span class="button-text">Log In</span>
+    <p-button
+      type="submit"
+      label="Log In"
+      class="login-form__button"
+      [loading]="authService.state().loading"
+      [disabled]="loginForm().invalid() || authService.state().loading"
+    />
+
+    @if (authService.state().error) {
+      <p-message severity="error">{{ authService.state().error }}</p-message>
     }
-  </button>
-
-  @if (authService.state().error) {
-    <p class="error-list">
-      {{ authService.state().error }}
-    </p>
-  }
-</form>
+  </form>
+</div>
