@@ -6,6 +6,7 @@ import { LoggerService } from './logger-service';
 @Injectable({ providedIn: 'root' })
 export class StorageService {
   private readonly SECRET_KEY = environment.cryptoKey;
+  private readonly ENCRYPT = environment.encryptStorage;
 
   private logger = inject(LoggerService);
 
@@ -14,20 +15,27 @@ export class StorageService {
 
     try {
       const data = JSON.stringify(value);
-      const encrypted = CryptoJS.AES.encrypt(data, this.SECRET_KEY).toString();
-      localStorage.setItem(key, encrypted);
+
+      const content = this.ENCRYPT ? CryptoJS.AES.encrypt(data, this.SECRET_KEY).toString() : data;
+
+      localStorage.setItem(key, content);
     } catch (e) {
       this.logger.error('Error guardando datos en storage', e);
     }
   }
 
   get<T>(key: string): T | null {
-    const encrypted = localStorage.getItem(key);
-    if (!encrypted) return null;
+    const data = localStorage.getItem(key);
+    if (!data) return null;
 
     try {
-      const bytes = CryptoJS.AES.decrypt(encrypted, this.SECRET_KEY);
-      const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+      let decryptedData: string;
+      if (this.ENCRYPT) {
+        const bytes = CryptoJS.AES.decrypt(data, this.SECRET_KEY);
+        decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+      } else {
+        decryptedData = data;
+      }
 
       if (!decryptedData) return null;
 
