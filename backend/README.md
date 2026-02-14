@@ -19,7 +19,7 @@ php bin/console doctrine:schema:validate
 ## Crear usuario de prueba
 
 ```
-php bin/console app:create-user
+php bin/console doctrine:fixtures:load
 ```
 
 ## Dependencias
@@ -47,3 +47,8 @@ Este paquete lee tu código (tus controladores, tus entidades y los atributos qu
 **symfony/twig-bundle**
 
 Twig es un lenguaje que permite generar HTML de forma dinámica. Aunque tu API solo devuelva JSON, Symfony necesita Twig para "dibujar" páginas web internas.
+
+**doctrine/doctrine-fixtures-bundle**
+
+Permite crear clases PHP donde defines objetos (como Usuario), les asignas valores y los guardas en la base de datos de forma controlada.
+
