@@ -6,14 +6,14 @@ export const mockInterceptor: HttpInterceptorFn = (req, next) => {
   const { url, method } = req;
 
   // Mock para Login
-  if (url.endsWith('/api/login-check') && method === 'POST') {
+  if (url.endsWith('/auth/login') && method === 'POST') {
     return of(new HttpResponse({
       status: 200,
       body: { user: { id: 1, username: 'operario_bilbao', roles: ['ROLE_USER'] } }
     })).pipe(delay(1200));
   }
 
-  if (url.endsWith('/api/login-check') && method === 'POST') {
+  if (url.endsWith('/auth/login') && method === 'POST') {
     const errorResponse = new HttpErrorResponse({
       error: { message: 'Credenciales inválidas', code: 'INVALID_CREDENTIALS' },
       status: 400,
