@@ -1,5 +1,5 @@
 PROJECT_NAME := $(shell grep PROJECT_NAME .env | cut -d '=' -f 2)
-COMPOSE := docker-compose -p $(PROJECT_NAME) -f docker-compose.yml
+COMPOSE := docker compose -p $(PROJECT_NAME) -f docker-compose.yml
 
 .PHONY: build up down start stop ps logs goto
 
