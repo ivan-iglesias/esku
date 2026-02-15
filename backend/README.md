@@ -26,7 +26,7 @@ php bin/console doctrine:fixtures:load
 
 ```sh
 composer require symfony/security-bundle lexik/jwt-authentication-bundle
-composer require doctrine/orm doctrine/doctrine-bundle psr/log
+composer require doctrine/orm doctrine/doctrine-bundle psr/log symfony/monolog-bundle
 composer require --dev symfony/maker-bundle
 ```
 
@@ -75,6 +75,12 @@ php bin/console --env=test doctrine:database:create
 php bin/console --env=test doctrine:migrations:migrate
 
 php bin/phpunit
+```
+
+#### symfony/validator
+
+```sh
+composer require symfony/validator
 ```
 
 #### doctrine/doctrine-fixtures-bundle
