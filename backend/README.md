@@ -14,11 +14,6 @@ php bin/console doctrine:database:drop --force
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 php bin/console doctrine:schema:validate
-```
-
-## Crear usuario de prueba
-
-```
 php bin/console doctrine:fixtures:load
 ```
 
@@ -83,6 +78,12 @@ php bin/phpunit
 composer require symfony/validator
 ```
 
+#### symfony/mailer
+
+```sh
+composer require symfony/mailer
+```
+
 #### doctrine/doctrine-fixtures-bundle
 
 Permite crear clases PHP donde defines objetos (como Usuario), les asignas valores y los guardas en la base de datos de forma controlada.
@@ -119,6 +120,3 @@ php bin/console doctrine:migrations:migrate --env=test --no-interaction
 # Cargar tus usuarios (admin@esku.com, etc.)
 php bin/console doctrine:fixtures:load --env=test --no-interaction
 ```
-
-
-

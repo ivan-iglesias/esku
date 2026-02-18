@@ -12,7 +12,7 @@ class LoginTest extends WebTestCase
 
         $client->request(
             'POST',
-            '/api/login',
+            '/api/auth/login',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
@@ -35,7 +35,7 @@ class LoginTest extends WebTestCase
 
         $client->request(
             'POST',
-            '/api/login',
+            '/api/auth/login',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],

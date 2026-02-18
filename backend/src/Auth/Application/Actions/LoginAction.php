@@ -22,9 +22,7 @@ class LoginAction
 
         $token = $this->jwtManager->create($user);
 
-        $email = $user->getEmail();
-
-        $this->logger->info("Login realizado: {$email}");
+        $this->logger->info("Login realizado: '{$user->getEmail()}'");
 
         // if ($userDto->isBanned()) { throw new \Exception("Acceso denegado"); }
 

@@ -2,72 +2,53 @@
 
 namespace App\Auth\Infrastructure\Controller;
 
-use App\Auth\Application\Actions\LoginAction;
-use App\Auth\Application\DTO\AuthResponse;
-use App\Auth\Application\DTO\LoginInput;
+use App\Auth\Application\Actions\PasswordlessLoginAction;
+use App\Auth\Application\DTO\PasswordlessLoginInput;
 use App\Shared\Domain\Exception\BusinessException;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-#[Route('/api/auth/login', name: 'api_login', methods: ['POST'])]
+#[Route('/api/auth/login-code', name: 'api_passwordless_login', methods: ['POST'])]
 #[OA\Post(
-    path: '/api/auth/login',
-    summary: 'Inicia sesión para obtener el token JWT',
+    path: '/api/auth/login-code',
+    summary: 'Solicita un código de acceso de 5 dígitos vía email',
     tags: ['Auth'],
     requestBody: new OA\RequestBody(
-        description: 'Credenciales de acceso',
-        content: new OA\JsonContent(ref: new Model(type: LoginInput::class))
+        description: 'Email del usuario para recibir el código OTP',
+        content: new OA\JsonContent(ref: new Model(type: PasswordlessLoginInput::class))
     ),
     responses: [
         new OA\Response(
             response: 200,
-            description: 'Autenticación exitosa',
-            content: new OA\JsonContent(ref: new Model(type: AuthResponse::class))
-        ),
-        new OA\Response(
-            response: 401,
-            description: 'Credenciales inválidas',
+            description: 'Solicitud procesada',
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(property: 'error', type: 'string', example: 'Credenciales inválidas')
+                    new OA\Property(property: 'message', type: 'string', example: 'Si el email existe...')
                 ]
             )
         ),
         new OA\Response(
             response: 422,
-            description: 'Error de validación en los datos de entrada',
+            description: 'Error de validación',
             content: new OA\JsonContent(
                 properties: [
-                    new OA\Property(
-                        property: 'errors',
-                        type: 'object',
-                        example: ['email' => 'El formato del email no es válido.']
-                    )
-                ]
-            )
-        ),
-        new OA\Response(
-            response: 500,
-            description: 'Error crítico del servidor',
-            content: new OA\JsonContent(
-                properties: [
-                    new OA\Property(property: 'error', type: 'string', example: 'Ha ocurrido un error inesperado.')
+                    new OA\Property(property: 'errors', type: 'object', example: ['email' => 'Email inválido'])
                 ]
             )
         )
     ]
 )]
-class LoginController extends AbstractController
+class PasswordlessLoginController extends AbstractController
 {
     public function __construct(
-        private readonly LoginAction $action,
+        private readonly PasswordlessLoginAction $action,
         private readonly LoggerInterface $logger
     ) {}
 
@@ -75,7 +56,7 @@ class LoginController extends AbstractController
     {
         $data = json_decode($request->getContent(), true) ?? [];
 
-        $input = new LoginInput($data);
+        $input = new PasswordlessLoginInput($data);
 
         $errors = $validator->validate($input);
 
@@ -88,8 +69,9 @@ class LoginController extends AbstractController
         }
 
         try {
-            $authResponse = $this->action->execute($input);
-            return $this->json($authResponse);
+            $this->action->execute($input);
+
+            return $this->json(['message' => 'Si el email existe en nuestro sistema, recibirás un código de acceso en breve.']);
         } catch (BusinessException $error) {
             return $this->json([
                 'code' => $error->getBusinessCode(),

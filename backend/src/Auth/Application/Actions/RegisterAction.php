@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Auth\Application\Actions;
+
+use App\Auth\Application\DTO\RegisterInput;
+use App\Auth\Domain\Entity\User;
+use App\Auth\Domain\Event\UserRegisteredEvent;
+use App\Auth\Domain\Repository\UserRepositoryInterface;
+use App\Shared\Domain\Exception\BusinessErrorCode;
+use App\Shared\Domain\Exception\BusinessException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
+
+class RegisterAction
+{
+    public function __construct(
+        private UserRepositoryInterface $userRepository,
+        private UserPasswordHasherInterface $passwordHasher,
+        private EventDispatcherInterface $eventDispatcher
+    ) {}
+
+    public function execute(RegisterInput $input): void
+    {
+        if ($this->userRepository->existsByEmail($input->email)) {
+            throw new BusinessException(BusinessErrorCode::AUTH_USER_ALREADY_EXISTS);
+        }
+
+        $user = new User();
+
+        $hashedPassword = $this->passwordHasher->hashPassword($user, $input->password);
+
+        $user
+            ->setName($input->name)
+            ->setLastName($input->lastName)
+            ->setEmail($input->email)
+            ->setPassword($hashedPassword);
+
+        $this->userRepository->save($user);
+
+        $this->eventDispatcher->dispatch(
+            new UserRegisteredEvent($user->getId(), $user->getEmail(), $user->getName())
+        );
+    }
+}

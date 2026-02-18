@@ -2,7 +2,10 @@
 
 namespace App\Auth\Infrastructure\DataFixtures;
 
+use App\Auth\Domain\Entity\SecurityToken;
 use App\Auth\Domain\Entity\User;
+use App\Auth\Domain\Enum\SecurityTokenType;
+use App\Auth\Domain\Repository\SecurityTokenRepositoryInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -10,7 +13,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class UserFixtures extends Fixture
 {
     public function __construct(
-        private UserPasswordHasherInterface $passwordHasher
+        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly SecurityTokenRepositoryInterface $tokenRepository
     ) {}
 
     public function load(ObjectManager $manager): void
@@ -19,32 +23,66 @@ class UserFixtures extends Fixture
             [
                 'email' => 'admin@esku.com',
                 'password' => 'admin123',
-                'roles' => ['ROLE_ADMIN']
+                'roles' => ['ROLE_ADMIN'],
+                'name' => 'Admin',
+                'lastName' => 'Esku',
+                'active' => true
             ],
             [
                 'email' => 'warehouse@esku.com',
                 'password' => 'esku2024',
-                'roles' => ['ROLE_MANAGER']
+                'roles' => ['ROLE_MANAGER'],
+                'name' => 'Jefe',
+                'lastName' => 'Almacén',
+                'active' => true
             ],
             [
                 'email' => 'driver@esku.com',
                 'password' => 'ruta44',
-                'roles' => ['ROLE_USER']
+                'roles' => ['ROLE_USER'],
+                'name' => 'Conductor',
+                'lastName' => 'Rápido',
+                'active' => true
+            ],
+            [
+                'email' => 'disabled@esku.com',
+                'password' => 'ruta44',
+                'roles' => ['ROLE_USER'],
+                'name' => 'Usuario',
+                'lastName' => 'Inactivo',
+                'active' => false
             ],
         ];
 
-        foreach ($usersData as $userData) {
+        foreach ($usersData as $data) {
             $user = new User();
+            $hashedPassword = $this->passwordHasher->hashPassword($user, $data['password']);
 
-            $hashedPassword = $this->passwordHasher->hashPassword($user, $userData['password']);
+            $user
+                ->setName($data['name'])
+                ->setLastName($data['lastName'])
+                ->setEmail($data['email'])
+                ->setPassword($hashedPassword)
+                ->setRoles($data['roles']);
 
-            $user->setEmail($userData['email']);
-            $user->setRoles($userData['roles']);
-            $user->setPassword($hashedPassword);
+            if ($data['active']) {
+                $user->activate();
+            } else {
+                $user->deactivate();
+            }
 
             $manager->persist($user);
-        }
+            $manager->flush();
 
-        $manager->flush();
+            if (!$data['active']) {
+                $token = new SecurityToken(
+                    $user,
+                    'test_token_disabled_user',
+                    SecurityTokenType::CONFIRMATION,
+                    48
+                );
+                $this->tokenRepository->save($token);
+            }
+        }
     }
 }

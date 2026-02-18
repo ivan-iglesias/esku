@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Auth\Application\Actions;
+
+use App\Auth\Application\DTO\AuthResponse;
+use App\Auth\Application\DTO\PasswordlessLoginVerifyInput;
+use App\Auth\Domain\Repository\UserRepositoryInterface;
+use App\Auth\Domain\Repository\SecurityTokenRepositoryInterface;
+use App\Auth\Domain\Enum\SecurityTokenType;
+use App\Shared\Domain\Exception\BusinessErrorCode;
+use App\Shared\Domain\Exception\BusinessException;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Psr\Log\LoggerInterface;
+
+class PasswordlessLoginVerifyAction
+{
+    public function __construct(
+        private UserRepositoryInterface $userRepository,
+        private SecurityTokenRepositoryInterface $tokenRepository,
+        private JWTTokenManagerInterface $jwtManager,
+        private LoggerInterface $logger
+    ) {}
+
+    public function execute(PasswordlessLoginVerifyInput $input): AuthResponse
+    {
+        $user = $this->userRepository->findByEmail($input->email);
+
+        if (!$user) {
+            throw new BusinessException(BusinessErrorCode::AUTH_USER_NOT_FOUND);
+        }
+
+        $securityToken = $this->tokenRepository->findByTokenAndUser(
+            $input->code,
+            $user,
+            SecurityTokenType::TYPE_LOGIN
+        );
+
+        if (!$securityToken) {
+            throw new BusinessException(BusinessErrorCode::AUTH_INVALID_CODE);
+        }
+
+        $this->tokenRepository->delete($securityToken);
+
+        if (!$securityToken->isValid()) {
+            throw new BusinessException(BusinessErrorCode::AUTH_INVALID_CODE);
+        }
+
+        $token = $this->jwtManager->create($user);
+
+        $this->logger->info("Login realizado mediante código: '{$user->getEmail()}'");
+
+        return AuthResponse::fromUser($token, $user);
+    }
+}

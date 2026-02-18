@@ -5,8 +5,9 @@ namespace App\Auth\Infrastructure\Service;
 use App\Auth\Domain\Entity\User;
 use App\Auth\Domain\Repository\UserRepositoryInterface;
 use App\Auth\Domain\Service\AuthServiceInterface;
+use App\Shared\Domain\Exception\BusinessErrorCode;
+use App\Shared\Domain\Exception\BusinessException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class AuthService implements AuthServiceInterface
 {
@@ -20,9 +21,13 @@ class AuthService implements AuthServiceInterface
         $user = $this->userRepository->findByEmail($email);
 
         if (!$user || !$this->passwordHasher->isPasswordValid($user, $password)) {
-            throw new AuthenticationException('Credenciales técnicas incorrectas');
+            throw new BusinessException(BusinessErrorCode::AUTH_INVALID_CREDENTIALS);
         }
 
-         return $user;
+        if (!$user->isActive()) {
+            throw new BusinessException(BusinessErrorCode::AUTH_USER_INACTIVE);
+        }
+
+        return $user;
     }
 }
