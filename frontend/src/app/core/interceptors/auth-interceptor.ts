@@ -8,8 +8,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const storage = inject(StorageService);
 
+  // 1. Obtenemos el token actual del storage
   const accessToken = storage.get<string>('at');
-
   let authReq = req;
 
   if (accessToken) {
@@ -20,21 +20,17 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401 && !req.url.includes('auth/login')) {
+      // 2. Si es 401 y no es login ni el propio refresh
+      if (error.status === 401 && !req.url.includes('auth/login') && !req.url.includes('auth/refresh')) {
         return authService.refreshToken().pipe(
           switchMap((response) => {
-            // Reintentamos la petición original con el nuevo token
-            const retryReq = req.clone({
+            // 3. Reintentamos con el token que viene fresco del servicio
+            return next(req.clone({
               setHeaders: { Authorization: `Bearer ${response.accessToken}` },
-            });
-            return next(retryReq);
+            }));
           }),
-
-          catchError((err) => {
-            // Si el refresh también falla (401 o 403), el usuario debe loguearse de nuevo
-            authService.logout();
-            return throwError(() => err);
-          })
+          // 4. Si el refresh falla, el servicio ya hizo logout, pero aquí matamos la petición
+          catchError((refreshErr) => throwError(() => refreshErr))
         );
       }
       return throwError(() => error);

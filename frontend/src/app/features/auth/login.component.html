@@ -2,7 +2,7 @@
   <form (submit)="onSubmit($event)" class="login-form">
     <h1 class="login-form__title">Esku Logistics</h1>
 
-    <fieldset [disabled]="authService.state().loading" class="login-form__group">
+    <fieldset [disabled]="loading()" class="login-form__group">
       <div class="login-form__field">
         <label for="email">Email</label>
 
@@ -61,12 +61,12 @@
       type="submit"
       label="Log In"
       class="login-form__button"
-      [loading]="authService.state().loading"
-      [disabled]="loginForm().invalid() || authService.state().loading"
+      [loading]="loading()"
+      [disabled]="loginForm().invalid() || loading()"
     />
 
-    @if (authService.state().error) {
-      <p-message severity="error">{{ authService.state().error }}</p-message>
+    @if (authError()) {
+      <p-message severity="error">{{ authError() }}</p-message>
     }
   </form>
 </div>

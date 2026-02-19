@@ -25,8 +25,13 @@ export const resilienceInterceptor: HttpInterceptorFn = (req, next) => {
 
         // Queremos reintentar SI es un Timeout o SI es un error de servidor (5xx)
         if (isTimeout || (status && status >= 500)) {
-          logger.debug(`Reintentando "${req.url}" por ${isTimeout ? 'Timeout' : 'Error ' + status} (${retryCount}/${RETRY_COUNT})`);
-          return timer(retryCount * 1500);
+
+          // 2^retryCount * 1000 milisegundos + un extra aleatorio de 0-1000ms
+          const waitTime = Math.pow(2, retryCount) * 1000 + Math.floor(Math.random() * 1000);
+
+          logger.debug(`Reintentando "${req.url}" en ${waitTime}ms por ${isTimeout ? 'Timeout' : 'Error ' + status} (${retryCount}/${RETRY_COUNT})`);
+
+          return timer(waitTime);
         }
 
         return throwError(() => error);
@@ -36,12 +41,15 @@ export const resilienceInterceptor: HttpInterceptorFn = (req, next) => {
     // CATCH ERROR
     catchError((error: HttpErrorResponse | any) => {
       if (error.name === 'TimeoutError' || error instanceof TimeoutError) {
-        return throwError(() => new HttpErrorResponse({
-          error: { code: 'TIMEOUT' },
-          status: 408,
-          statusText: 'Request Timeout',
-          url: req.url || undefined
-        }));
+        return throwError(
+          () =>
+            new HttpErrorResponse({
+              error: { code: 'TIMEOUT' },
+              status: 408,
+              statusText: 'Request Timeout',
+              url: req.url || undefined,
+            })
+        );
       }
       return throwError(() => error);
     })

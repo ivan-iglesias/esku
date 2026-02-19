@@ -39,3 +39,8 @@ src/app/
 - Pages vs Components: Dentro de cada funcionalidad, separamos los "Smart Components" (Pages: gestionan datos) de los "Dumb Components" (Components: solo muestran datos y emiten eventos).
 
 - BEM Encapsulado: Los estilos específicos de la tarjeta de inventario irán en `features/inventory/components/card/card.component.scss`, mientras que los colores de marca de Esku irán en `assets/scss/base/_variables.scss`.
+
+
+## TODO
+
+¿Te gustaría que implementemos el OfflineInterceptor para que, cuando el resilienceInterceptor agote los reintentos, el sistema intente buscar los datos en la base de datos local de Dexie automáticamente?

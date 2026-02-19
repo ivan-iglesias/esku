@@ -28,9 +28,12 @@ import { CheckboxModule } from 'primeng/checkbox';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
-  private logger = inject(LoggerService);
-  public authService = inject(AuthService);
-  private router = inject(Router);
+  private readonly logger = inject(LoggerService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+
+  protected readonly loading = this.authService.loading;
+  protected readonly authError = this.authService.authError;
 
   loginModel = signal<LoginData>({
     email: 'john@gmail.com',

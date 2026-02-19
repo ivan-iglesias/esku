@@ -8,7 +8,7 @@ export class StorageService {
   private readonly SECRET_KEY = environment.cryptoKey;
   private readonly ENCRYPT = environment.encryptStorage;
 
-  private logger = inject(LoggerService);
+  private readonly logger = inject(LoggerService);
 
   set(key: string, value: any): void {
     if (!value) return;

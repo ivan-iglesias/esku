@@ -7,7 +7,7 @@ import { AuthService } from '../../core/services/auth-service';
     <div class="dashboard">
       <header>
         <h1>Esku - Gestión de Almacén</h1>
-        <span>Operario: {{ authService.state().user?.username }}</span>
+        <span>Operario: {{ username() }}</span>
       </header>
       <main>
         <p>Bienvenido al inventario. Aquí listaremos los productos pronto.</p>
@@ -19,5 +19,7 @@ import { AuthService } from '../../core/services/auth-service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent {
-  public authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
+
+  protected readonly username = this.authService.username;
 }
