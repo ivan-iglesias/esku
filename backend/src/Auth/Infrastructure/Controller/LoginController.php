@@ -6,6 +6,7 @@ use App\Auth\Application\Actions\LoginAction;
 use App\Auth\Application\DTO\AuthResponse;
 use App\Auth\Application\DTO\LoginInput;
 use App\Shared\Infrastructure\Controller\BaseApiController;
+use App\Shared\Infrastructure\Controller\Traits\HasRateLimiterTrait;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
@@ -16,6 +17,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class LoginController extends BaseApiController
 {
+    use HasRateLimiterTrait;
+    
     public function __construct(
         private readonly LoginAction $action,
         LoggerInterface $logger,

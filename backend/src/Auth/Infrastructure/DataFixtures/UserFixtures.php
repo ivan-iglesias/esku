@@ -30,7 +30,7 @@ class UserFixtures extends Fixture
             ],
             [
                 'email' => 'warehouse@esku.com',
-                'password' => 'esku2024',
+                'password' => 'warehouse123',
                 'roles' => ['ROLE_MANAGER'],
                 'name' => 'Jefe',
                 'lastName' => 'Almacén',
@@ -38,7 +38,7 @@ class UserFixtures extends Fixture
             ],
             [
                 'email' => 'driver@esku.com',
-                'password' => 'ruta44',
+                'password' => 'driver123',
                 'roles' => ['ROLE_USER'],
                 'name' => 'Conductor',
                 'lastName' => 'Rápido',
@@ -46,7 +46,7 @@ class UserFixtures extends Fixture
             ],
             [
                 'email' => 'disabled@esku.com',
-                'password' => 'ruta44',
+                'password' => 'disabled123',
                 'roles' => ['ROLE_USER'],
                 'name' => 'Usuario',
                 'lastName' => 'Inactivo',

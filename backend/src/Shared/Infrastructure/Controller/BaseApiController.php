@@ -8,9 +8,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 abstract class BaseApiController extends AbstractController
@@ -18,20 +15,7 @@ abstract class BaseApiController extends AbstractController
     public function __construct(
         protected readonly LoggerInterface $logger,
         private readonly ValidatorInterface $validator,
-        private readonly RateLimiterFactory $apiLimiter,
     ) {}
-
-    /**
-     * Comprueba el limite de peticiones
-     */
-    protected function checkRateLimit(Request $request): void
-    {
-        $limiter = $this->apiLimiter->create($request->getClientIp());
-
-        if (false === $limiter->consume(1)->isAccepted()) {
-            throw new HttpException(Response::HTTP_TOO_MANY_REQUESTS, 'Rate limit exceeded');
-        }
-    }
 
     /**
      * Para POST/PUT con Body JSON y validación de DTO

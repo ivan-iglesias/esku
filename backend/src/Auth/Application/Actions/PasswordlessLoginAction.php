@@ -31,7 +31,7 @@ class PasswordlessLoginAction
             $user,
             $code,
             SecurityTokenType::TYPE_LOGIN,
-            0.25 // Expira en 15 minutos
+            15
         );
 
         $this->tokenRepository->save($token);

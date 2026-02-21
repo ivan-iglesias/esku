@@ -47,7 +47,7 @@ class PasswordlessLoginVerifyAction
 
         $token = $this->jwtManager->create($user);
 
-        $this->logger->info("Login realizado mediante código: '{$user->getEmail()}'");
+        $this->logger->info("Login realizado (código): '{$user->getEmail()}'");
 
         return AuthResponse::fromUser($token, $user);
     }

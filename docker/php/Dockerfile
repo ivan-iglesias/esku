@@ -10,7 +10,14 @@ RUN apk add --no-cache \
     libpq-dev \
     git \
     unzip \
+    tzdata \
     shadow # 'shadow' nos permite usar usermod y groupmod en alpine
+
+# Configuramos la zona horaria a nivel de sistema y PHP
+ENV TZ=Europe/Madrid
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN echo "date.timezone = Europe/Madrid" > /usr/local/etc/php/conf.d/00-docker-php-ext-timezone.ini \
+    && chmod 644 /usr/local/etc/php/conf.d/00-docker-php-ext-timezone.ini
 
 # Instalamos extensiones de PHP
 RUN docker-php-ext-install intl pdo pdo_pgsql

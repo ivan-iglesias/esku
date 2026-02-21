@@ -26,14 +26,14 @@ class SecurityToken
     private SecurityTokenType $type;
 
     #[ORM\Column]
-    private \DateTimeImmutable $expiresAt;
+    public \DateTimeImmutable $expiresAt;
 
-    public function __construct(User $user, string $token, SecurityTokenType $type, int $ttlInHours = 24)
+    public function __construct(User $user, string $token, SecurityTokenType $type, int $ttlInMinutes = 24 * 60)
     {
         $this->user = $user;
         $this->token = $token;
         $this->type = $type;
-        $this->expiresAt = new \DateTimeImmutable("+{$ttlInHours} hours");
+        $this->expiresAt = new \DateTimeImmutable("+{$ttlInMinutes} minutes");
     }
 
     public function isValid(): bool

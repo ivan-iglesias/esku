@@ -23,6 +23,7 @@ services:
         - ./backend:/var/www/html
       environment:
         DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?serverVersion=16&charset=utf8"
+        TZ: Europe/Madrid # Configura la zona horaria a nivel de sistema operativo
       depends_on:
         - database
 

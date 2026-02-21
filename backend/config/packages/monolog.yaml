@@ -9,11 +9,13 @@ when@dev:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
-                channels: ["!event"]
+                channels: ["!event", "!security"]
+                formatter: app.monolog.custom_formatter
             console:
                 type: console
                 process_psr_3_messages: false
                 channels: ["!event", "!doctrine", "!console"]
+                formatter: app.monolog.custom_formatter
 
 when@test:
     monolog:
@@ -28,6 +30,7 @@ when@test:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
+                formatter: app.monolog.custom_formatter
 
 when@prod:
     monolog:
@@ -43,11 +46,13 @@ when@prod:
                 type: stream
                 path: php://stderr
                 level: debug
-                formatter: monolog.formatter.json
+                # formatter: monolog.formatter.json
+                formatter: app.monolog.custom_formatter
             console:
                 type: console
                 process_psr_3_messages: false
                 channels: ["!event", "!doctrine"]
+                formatter: app.monolog.custom_formatter
             deprecation:
                 type: stream
                 channels: [deprecation]
