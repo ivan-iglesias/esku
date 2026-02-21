@@ -74,6 +74,8 @@ class LoginController extends BaseApiController
     )]
     public function __invoke(Request $request): JsonResponse
     {
+        $this->checkRateLimit($request);
+
         return $this->handleInput(
             $request,
             LoginInput::class,

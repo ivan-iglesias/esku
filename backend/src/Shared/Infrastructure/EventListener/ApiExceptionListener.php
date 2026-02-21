@@ -31,10 +31,20 @@ class ApiExceptionListener
 
         // Errores de Symfony/HTTP (ej: 404 Route Not Found o 405 Method Not Allowed)
         if ($exception instanceof HttpExceptionInterface) {
+            $status = $exception->getStatusCode();
+
+            $code = match ($status) {
+                404 => 'RESOURCE_NOT_FOUND',
+                405 => 'METHOD_NOT_ALLOWED',
+                403 => 'ACCESS_DENIED',
+                429 => 'TOO_MANY_REQUESTS',
+                default => 'HTTP_ERROR',
+            };
+
             $event->setResponse(ApiResponse::error(
-                'HTTP_ERROR',
+                $code,
                 $exception->getMessage(),
-                $exception->getStatusCode()
+                $status
             ));
             return;
         }

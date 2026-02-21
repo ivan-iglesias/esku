@@ -41,6 +41,18 @@ Te permite hablar con la base de datos usando objetos de PHP en lugar de escribi
 
 Es la integración oficial para que Doctrine funcione dentro de Symfony.
 
+#### symfony/uid
+
+```sh
+composer require symfony/uid
+```
+
+#### symfony/rate-limiter
+
+```sh
+composer require symfony/rate-limiter
+```
+
 #### psr/log
 
 PSR significa PHP Standard Recommendation. Este paquete define una interfaz común para que todos los sistemas de logging (como Monolog, que viene con Symfony) hablen el mismo idioma.
@@ -96,11 +108,11 @@ Tests Unitarios (probar la lógica de tus entidades y servicios en Domain) y Tes
 
 Hacer peticiones HTTP reales a tu API (como si fueras Swagger o Angular) y verificar que un POST `/api/shipments` devuelve un 201 Created.
 
-- **symfony/phpunit-bridge**
+-   **symfony/phpunit-bridge**
 
 Es un componente que se asegura de que PHPUnit se ejecute con las dependencias correctas de Symfony y limpia los deprecation warnings para que la consola no se llene de ruido.
 
-- **symfony/browser-kit**
+-   **symfony/browser-kit**
 
 Es el que permite que el $client haga peticiones internas sin necesidad de levantar un servidor web real (es extremadamente rápido).
 
